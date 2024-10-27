@@ -1,0 +1,127 @@
+1.
+
+.model small
+.stack 100h
+.data
+.code
+
+main proc
+      mov ah,1
+      int 21h 
+     
+      cmp al,'1'
+      je msg1
+      
+      cmp al,'2'
+      je msg2
+      
+      cmp al,'3'
+      je msg1
+      
+      cmp al,'4'
+      je msg2 
+      
+      jmp exit
+      
+      msg1:
+      mov ah,2
+      mov dl,'o'
+      int 21h
+      jmp exit
+      
+      msg2:
+      mov ah,2
+      mov dl,'e'
+      int 21h
+      jmp exit
+      
+      
+      exit:
+      mov AH,4CH
+      int 21h
+      
+      main endp
+end main
+
+
+2.
+
+ .model small
+ .stack 100h
+ .data
+ 
+ msg1 db "Enter a letter: $"
+ msg2 db "CAPITAL LETTER. $"
+ msg3 db "small letter. $"
+ msg4 db "Unknown Letter. $"
+ 
+ .code
+ 
+ main proc
+    
+    mov ax, @data
+    mov ds, ax
+    
+    mov ah, 9
+    lea dx, msg1
+    int 21h
+    
+    mov ah, 1
+    int 21h
+    mov bh,al
+    
+    mov ah, 2
+    mov dl, 0Ah
+    int 21h
+    mov dl, 0Dh
+    int 21h
+    
+    cmp bh, 'A'
+    jge chk_capital
+    jmp chk_lower
+    
+    chk_capital:
+    cmp bh, 'Z'
+    jle print_capital
+    jmp chk_lower
+    
+    print_capital:
+    mov ah, 9
+    lea dx, msg2
+    int 21h
+    jmp exit
+    
+    chk_lower:
+    cmp bh, 'a'
+    jge chk_small
+    jmp unknown
+    
+    chk_small:
+    cmp bh, 'z'
+    jle print_small
+    jmp unknown
+    
+    print_small:
+    mov ah, 9
+    lea dx, msg3
+    int 21h
+    jmp exit
+    
+    unknown:
+    mov ah, 9
+    lea dx, msg4
+    int 21h
+    
+    exit:
+    mov ah,4CH
+    int 21h
+    
+    main endp
+ end main
+    
+    
+    
+     
+    
+    
+    
